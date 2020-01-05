@@ -35,14 +35,14 @@ app.get('/getLocation', function (req, res) {
 });
 
 app.get('/getBoroughInfo', function (req, res) {
-    let borough = req.query.borough;
+    let boroughName = req.query.boroughName;
     var params = {
-        TableName: 'borough_info',
+        TableName: 'boroughs',
         Key: {
-            'borough_id': { N: borough }
+            'name': { S: boroughName }
         },
         AttributesToGet: [
-            'disabled_badge_parking_limit',
+            'id',
         ],
     };
 
@@ -50,7 +50,25 @@ app.get('/getBoroughInfo', function (req, res) {
         if (err) {
             console.log("Error", err);
         } else {
-            res.json({data});
+            if (data.Item !== null && typeof data.Item !== 'undefined') {
+                const boroughId = data.Item.id.N;
+                var params = {
+                    TableName: 'borough_info',
+                    Key: {
+                        'borough_id': { N: boroughId }
+                    },
+                };
+            
+                ddb.getItem(params, function(err, data) {
+                    if (err) {
+                        console.log("Error", err);
+                    } else {
+                        res.json(data.Item);
+                    }
+                });
+            } else {
+                res.status(500).send('Invalid borough.')
+            }
         }
     });
 });
