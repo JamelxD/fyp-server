@@ -73,4 +73,19 @@ app.get('/getBoroughInfo', function (req, res) {
     });
 });
 
+app.get('/getDisabledParkingLocations', function (req, res) {
+    var params = {
+        TableName: 'disabled_parking_locations',
+        Select: "ALL_ATTRIBUTES"
+    };
+
+    ddb.scan(params, function(err, data) {
+        if (err) {
+            console.log("Error", err);
+        } else {
+            res.json(data);
+        }
+    });
+});
+
 app.listen(PORT, () => console.log(`Express server currently running on port ${PORT}`));
