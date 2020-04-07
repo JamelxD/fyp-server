@@ -69,8 +69,13 @@ app.get('/getBoroughInfo', function (req, res) {
           } else {
             if (Object.keys(data).length === 0) {
               res.status(200).json({
-                disabled_badge_parking_limit: { N: '' },
-                pcn_prices: { N: '' },
+                double_yellow_parking_limit: { S: '' },
+                single_yellow_parking_limit: { S: '' },
+                car_park_access: { S: '' },
+                congestion_zone: { S: '' },
+                disabledbays: { S: '' },
+                p_and_d: { S: '' },
+                additional_info: { S: '' },
                 parking_strictness: { S: '' },
                 id: { N: '-1' },
                 borough_id: { N: boroughId }
